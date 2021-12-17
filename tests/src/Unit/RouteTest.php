@@ -141,9 +141,13 @@ class RouteTest extends UnitTestCase
 
         $controller = '\Drupal\controller\Controller';
 
-        $route = Route::get('/')->controller($controller);
+        $route = Route::get('/')->controller($controller, 'render');
 
-        $this->assertEquals($controller, $route->getDefault('_controller'));
+        $this->assertEquals($controller . '::render', $route->getDefault('_controller'));
+
+        $route->controller('\Drupal\controller\Controller');
+
+        $this->assertEquals($controller . '::__invoke', $route->getDefault('_controller'));
     }
 
     /** @test */

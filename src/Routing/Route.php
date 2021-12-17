@@ -71,9 +71,9 @@ class Route extends SymfonyRoute
         return $this;
     }
 
-    public function controller(string $controller): self
+    public function controller(string $controller, string $method = '__invoke'): self
     {
-        return $this->setDefault('_controller', $controller);
+        return $this->setDefault('_controller', $controller . '::' . $method);
     }
 
     public function form(string $form): self
