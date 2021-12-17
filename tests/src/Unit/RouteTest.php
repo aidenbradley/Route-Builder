@@ -619,4 +619,42 @@ class RouteTest extends UnitTestCase
 
         $this->assertTrue((bool) $route->getOption('no_cache'));
     }
+
+    /** @test */
+    public function set_parameter_converter()
+    {
+        $route = Route::get('/page/{node}');
+
+        $this->assertEmpty($route->getOption('parameters'));
+
+        $route->setParameterConverter('node', 'entity:node');
+
+        $this->assertEquals([
+            'node' => [
+                'type' => 'entity:node',
+            ]
+        ], $route->getOption('parameters'));
+
+        $route->setParameterConverter('another_param', 'another_converter');
+
+        $this->assertEquals([
+            'node' => [
+                'type' => 'entity:node',
+            ],
+            'another_param' => [
+                'type' => 'another_converter',
+            ],
+        ], $route->getOption('parameters'));
+
+        $route->setParameterConverter('another_param', 'another_converter');
+
+        $this->assertEquals([
+            'node' => [
+                'type' => 'entity:node',
+            ],
+            'another_param' => [
+                'type' => 'another_converter',
+            ],
+        ], $route->getOption('parameters'));
+    }
 }

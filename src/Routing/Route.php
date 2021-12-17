@@ -278,13 +278,17 @@ class Route extends SymfonyRoute
     // @TODO add test coverage for parameter converters and review documentation
     public function setParameterConverter(string $paramName, string $convertName): self
     {
-        $this->parameters = array_merge($this->parameters, [
+        $paramConverters = [
             $paramName => [
                 'type' => $convertName,
             ],
-        ]);
+        ];
 
-        return $this->setOption('parameters', $this->parameters);
+        if ($this->getOption('parameters') !== null) {
+            $paramConverters = array_merge($this->getOption('parameters'), $paramConverters);
+        }
+
+        return $this->setOption('parameters', $paramConverters);
     }
 
     private function addAuthMechanism(string $authMechanism): self
