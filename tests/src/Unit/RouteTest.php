@@ -444,4 +444,45 @@ class RouteTest extends UnitTestCase
 
         $this->assertEquals('xml', $route->getRequirement('_format'));
     }
+
+    /** @test */
+    public function depends_on_all_modules(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_module_dependencies'));
+
+        $modules = [
+            'node',
+            'media',
+        ];
+
+        $route->dependsOnAllModules($modules);
+
+        $this->assertEquals(implode(',', $modules), $route->getRequirement('_format'));
+    }
+
+    /** @test */
+    public function uses_csrf(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse((bool) $route->getRequirement('_csrf_token'));
+
+        $route->usesCsrf();
+
+        $this->assertTrue((bool) $route->getRequirement('_csrf_token'));
+    }
+
+    /** @test */
+    public function requires_csrf_token_header(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse((bool) $route->getRequirement('_csrf_request_header_token'));
+
+        $route->requiresCsrfTokenHeader();
+
+        $this->assertTrue((bool) $route->getRequirement('_csrf_request_header_token'));
+    }
 }

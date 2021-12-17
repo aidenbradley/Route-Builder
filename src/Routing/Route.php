@@ -196,6 +196,27 @@ class Route extends SymfonyRoute
         return $this->setRequirement('_content_type_format', 'xml');
     }
 
+    public function dependsOnAllModules(array $modules): self
+    {
+        return $this->setRequirement('_module_dependencies', implode(',', $modules));
+    }
+
+    /** @param string|array $modules */
+    public function dependsOnAnyModule($modules): self
+    {
+        return $this->setRequirement('_module_dependencies', implode(',', $modules));
+    }
+
+    public function usesCsrf(): self
+    {
+        return $this->setRequirement('_csrf_token', 'TRUE');
+    }
+
+    public function requiresCsrfTokenHeader(): self
+    {
+        return $this->setRequirement('_csrf_request_header_token', 'TRUE');
+    }
+
     public function noCache(): self
     {
         return $this->setOption('no_cache', 'TRUE');
