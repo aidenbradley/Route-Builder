@@ -623,7 +623,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function set_parameter_converter()
     {
-        $route = Route::get('/page/{node}');
+        $route = Route::get('/page/{node}/{another_param}');
 
         $this->assertEmpty($route->getOption('parameters'));
 
