@@ -221,18 +221,6 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
-    public function no_cache(): void
-    {
-        $route = Route::get('/');
-
-        $this->assertFalse((bool) $route->getOption('no_cache'));
-
-        $route->noCache();
-
-        $this->assertTrue((bool) $route->getOption('no_cache'));
-    }
-
-    /** @test */
     public function requires_all_permissions(): void
     {
         $permissions = [
@@ -573,5 +561,41 @@ class RouteTest extends UnitTestCase
         $route->requiresCookieAuth();
 
         $this->assertEquals(['cookie'], $route->getOption('_auth'));
+    }
+
+    /** @test */
+    public function accessible_during_maintenance(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse((bool) $route->getOption('_maintenance_access'));
+
+        $route->accessableDuringMaintenance();
+
+        $this->assertTrue((bool) $route->getOption('_maintenance_access'));
+    }
+
+    /** @test */
+    public function theme(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getOption('_theme'));
+
+        $route->theme('my_theme');
+
+        $this->assertEquals('my_theme', $route->getOption('_theme'));
+    }
+
+    /** @test */
+    public function no_cache(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse((bool) $route->getOption('no_cache'));
+
+        $route->noCache();
+
+        $this->assertTrue((bool) $route->getOption('no_cache'));
     }
 }

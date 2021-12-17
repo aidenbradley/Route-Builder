@@ -259,9 +259,32 @@ class Route extends SymfonyRoute
         return $this;
     }
 
+    public function accessableDuringMaintenance(): self
+    {
+        return $this->setOption('_maintenance_access', 'TRUE');
+    }
+
+    // need to find documentation on this
+    public function theme(string $theme): self
+    {
+        return $this->setOption('_theme', $theme);
+    }
+
     public function noCache(): self
     {
         return $this->setOption('no_cache', 'TRUE');
+    }
+
+    // @TODO add test coverage for parameter converters and review documentation
+    public function setParameterConverter(string $paramName, string $convertName): self
+    {
+        $this->parameters = array_merge($this->parameters, [
+            $paramName => [
+                'type' => $convertName,
+            ],
+        ]);
+
+        return $this->setOption('parameters', $this->parameters);
     }
 
     private function addAuthMechanism(string $authMechanism): self
