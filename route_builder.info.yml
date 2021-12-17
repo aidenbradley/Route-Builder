@@ -1,0 +1,7 @@
+name: Route Builder
+type: module
+description: 'Provides an expressive API to define routes when used in route callbacks'
+package: Custom
+version: VERSION
+hidden: true
+core_version_requirement: ^8 || ^9
