@@ -36,4 +36,44 @@ class Route extends SymfonyRoute
     {
         return static::create($path)->setMethods((array) 'DELETE');
     }
+
+    public function controller(string $controller): self
+    {
+        return $this->setDefault('_controller', $controller);
+    }
+
+    public function form(string $form): self
+    {
+        return $this->setDefault('_form', $form);
+    }
+
+    public function entityView(string $entityView): self
+    {
+        return $this->setDefault('_entity_view', $entityView);
+    }
+
+    public function entityList(string $entityList): self
+    {
+        return $this->setDefault('_entity_list', $entityList);
+    }
+
+    public function entityForm(string $entityForm): self
+    {
+        return $this->setDefault('_entity_form', $entityForm);
+    }
+
+    public function noCache(): self
+    {
+        return $this->setOption('no_cache', 'TRUE');
+    }
+
+    public function defaultAccess(): self
+    {
+        return $this->setRequirement('_access', 'TRUE');
+    }
+
+    public function accessCallback(string $accessCheck): self
+    {
+        return $this->setRequirement('_custom_access', $accessCheck);
+    }
 }
