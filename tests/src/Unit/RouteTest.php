@@ -645,15 +645,28 @@ class RouteTest extends UnitTestCase
                 'type' => 'another_converter',
             ],
         ], $route->getOption('parameters'));
+    }
 
-        $route->setParameterConverter('another_param', 'another_converter');
+    /** @test */
+    public function override_defined_parameter_converter()
+    {
+        $route = Route::get('/page/{node}/{another_param}');
+
+        $this->assertEmpty($route->getOption('parameters'));
+
+        $route->setParameterConverter('node', 'entity:node');
 
         $this->assertEquals([
             'node' => [
                 'type' => 'entity:node',
-            ],
-            'another_param' => [
-                'type' => 'another_converter',
+            ]
+        ], $route->getOption('parameters'));
+
+        $route->setParameterConverter('node', 'entity:media');
+
+        $this->assertEquals([
+            'node' => [
+                'type' => 'entity:media',
             ],
         ], $route->getOption('parameters'));
     }
