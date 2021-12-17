@@ -37,6 +37,31 @@ class Route extends SymfonyRoute
         return static::create($path)->setMethods((array) 'DELETE');
     }
 
+    public function acceptsGet(): self
+    {
+        return $this->addMethod('GET');
+    }
+
+    public function acceptsPost(): self
+    {
+        return $this->addMethod('POST');
+    }
+
+    public function acceptsPatch(): self
+    {
+        return $this->addMethod('PATCH');
+    }
+
+    public function acceptsPut(): self
+    {
+        return $this->addMethod('PUT');
+    }
+
+    public function acceptsDelete(): self
+    {
+        return $this->addMethod('DELETE');
+    }
+
     public function controller(string $controller): self
     {
         return $this->setDefault('_controller', $controller);
@@ -90,5 +115,12 @@ class Route extends SymfonyRoute
     public function accessCallback(string $accessCheck): self
     {
         return $this->setRequirement('_custom_access', $accessCheck);
+    }
+
+    private function addMethod(string $method): self
+    {
+        return $this->setMethods(array_merge($this->getMethods(), [
+            $method
+        ]));
     }
 }

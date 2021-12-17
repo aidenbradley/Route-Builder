@@ -16,9 +16,33 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function accepts_get(): void
+    {
+        $route = Route::post('/');
+
+        $this->assertFalse(in_array('GET', $route->getMethods()));
+
+        $route->acceptsGet();
+
+        $this->assertTrue(in_array('GET', $route->getMethods()));
+    }
+
+    /** @test */
     public function post(): void
     {
         $route = Route::post('/');
+
+        $this->assertTrue(in_array('POST', $route->getMethods()));
+    }
+
+    /** @test */
+    public function accepts_post(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse(in_array('POST', $route->getMethods()));
+
+        $route->acceptsPost();
 
         $this->assertTrue(in_array('POST', $route->getMethods()));
     }
@@ -32,6 +56,18 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function accepts_patch(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse(in_array('PATCH', $route->getMethods()));
+
+        $route->acceptsPatch();
+
+        $this->assertTrue(in_array('PATCH', $route->getMethods()));
+    }
+
+    /** @test */
     public function put(): void
     {
         $route = Route::put('/');
@@ -40,9 +76,33 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function accepts_put(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse(in_array('PUT', $route->getMethods()));
+
+        $route->acceptsPut();
+
+        $this->assertTrue(in_array('PUT', $route->getMethods()));
+    }
+
+    /** @test */
     public function delete(): void
     {
         $route = Route::delete('/');
+
+        $this->assertTrue(in_array('DELETE', $route->getMethods()));
+    }
+
+    /** @test */
+    public function accepts_delete(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse(in_array('DELETE', $route->getMethods()));
+
+        $route->acceptsDelete();
 
         $this->assertTrue(in_array('DELETE', $route->getMethods()));
     }
