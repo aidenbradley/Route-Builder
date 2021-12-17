@@ -368,8 +368,56 @@ class RouteTest extends UnitTestCase
 
         $accessCallback = get_class($this) . '::accessCallback';
 
-        $route->accessCallback($accessCallback);
+        $route->customAccessCallback($accessCallback);
 
         $this->assertEquals($accessCallback, $route->getRequirement('_custom_access'));
+    }
+
+    /** @test */
+    public function format(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_format'));
+
+        $route->format('json');
+
+        $this->assertEquals('json', $route->getRequirement('_format'));
+    }
+
+    /** @test */
+    public function json_format(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_format'));
+
+        $route->jsonFormat();
+
+        $this->assertEquals('json', $route->getRequirement('_format'));
+    }
+
+    /** @test */
+    public function html_format(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_format'));
+
+        $route->htmlFormat();
+
+        $this->assertEquals('html', $route->getRequirement('_format'));
+    }
+
+    /** @test */
+    public function xml_format(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_format'));
+
+        $route->xmlFormat();
+
+        $this->assertEquals('xml', $route->getRequirement('_format'));
     }
 }

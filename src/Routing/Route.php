@@ -160,9 +160,29 @@ class Route extends SymfonyRoute
         return $this->setRequirement('_entity_create_access', $entityTypeId . ':' . $bundleOrRouteParam);
     }
 
-    public function accessCallback(string $accessCheck): self
+    public function customAccessCallback(string $accessCheck): self
     {
         return $this->setRequirement('_custom_access', $accessCheck);
+    }
+
+    public function jsonFormat(): self
+    {
+        return $this->format('json');
+    }
+
+    public function htmlFormat(): self
+    {
+        return $this->format('html');
+    }
+
+    public function xmlFormat(): self
+    {
+        return $this->format('xml');
+    }
+
+    public function format(string $format): self
+    {
+        return $this->setRequirement('_format', $format);
     }
 
     public function noCache(): self
