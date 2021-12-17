@@ -447,7 +447,24 @@ class RouteTest extends UnitTestCase
 
         $route->dependsOnAllModules($modules);
 
-        $this->assertEquals(implode(',', $modules), $route->getRequirement('_format'));
+        $this->assertEquals(implode(',', $modules), $route->getRequirement('_module_dependencies'));
+    }
+
+    /** @test */
+    public function depends_on_any_modules(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_module_dependencies'));
+
+        $modules = [
+            'node',
+            'media',
+        ];
+
+        $route->dependsOnAnyModule($modules);
+
+        $this->assertEquals(implode('+', $modules), $route->getRequirement('_module_dependencies'));
     }
 
     /** @test */

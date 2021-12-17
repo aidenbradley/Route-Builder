@@ -204,7 +204,7 @@ class Route extends SymfonyRoute
     /** @param string|array $modules */
     public function dependsOnAnyModule($modules): self
     {
-        return $this->setRequirement('_module_dependencies', implode(',', $modules));
+        return $this->setRequirement('_module_dependencies', implode('+', $modules));
     }
 
     public function usesCsrf(): self
