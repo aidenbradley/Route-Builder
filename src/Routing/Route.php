@@ -57,6 +57,15 @@ class Route extends SymfonyRoute
         return $this->addMethod('PUT');
     }
 
+    public function acceptsMethods(array $methods): self
+    {
+        foreach ($methods as $method) {
+            $this->addMethod($method);
+        }
+
+        return $this;
+    }
+
     public function acceptsDelete(): self
     {
         return $this->addMethod('DELETE');

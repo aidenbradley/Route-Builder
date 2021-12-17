@@ -108,6 +108,31 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function accepts_methods(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEquals([
+            'GET'
+        ], $route->getMethods());
+
+        $route->acceptsMethods([
+            'PATCH',
+            'PUT',
+            'POST',
+            'DELETE',
+        ]);
+
+        $this->assertEquals([
+            'GET',
+            'PATCH',
+            'PUT',
+            'POST',
+            'DELETE',
+        ], $route->getMethods());
+    }
+
+    /** @test */
     public function controller(): void
     {
         $route = Route::get('/');
