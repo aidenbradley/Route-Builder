@@ -233,6 +233,62 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function requires_all_permissions(): void
+    {
+        $permissions = [
+            'first_permission',
+            'second_permission',
+            'third_permission',
+        ];
+
+        $route = Route::get('/')->requiresAllPermissions($permissions);
+
+        $this->assertEquals(implode(',', $permissions), $route->getRequirement('_permission'));
+    }
+
+    /** @test */
+    public function requires_any_permission(): void
+    {
+        $permissions = [
+            'first_permission',
+            'second_permission',
+            'third_permission',
+        ];
+
+        $route = Route::get('/')->requiresAnyPermission($permissions);
+
+        $this->assertEquals(implode('+', $permissions), $route->getRequirement('_permission'));
+    }
+
+    /** @test */
+    public function requires_all_roles(): void
+    {
+        $roles = [
+            'first_role',
+            'second_role',
+            'third_role',
+        ];
+
+        $route = Route::get('/')->requiresAllRoles($roles);
+
+        $this->assertEquals(implode(',', $roles), $route->getRequirement('_role'));
+    }
+
+    /** @test */
+    public function requires_any_role(): void
+    {
+        $roles = [
+            'first_role',
+            'second_role',
+            'third_role',
+        ];
+
+        $route = Route::get('/')->requiresAnyRoles($roles);
+
+        $this->assertEquals(implode('+', $roles), $route->getRequirement('_role'));
+    }
+
+    /** @test */
     public function default_access()
     {
         $route = Route::get('/');

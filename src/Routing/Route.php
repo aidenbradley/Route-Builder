@@ -57,6 +57,11 @@ class Route extends SymfonyRoute
         return $this->addMethod('PUT');
     }
 
+    public function acceptsDelete(): self
+    {
+        return $this->addMethod('DELETE');
+    }
+
     public function acceptsMethods(array $methods): self
     {
         foreach ($methods as $method) {
@@ -64,11 +69,6 @@ class Route extends SymfonyRoute
         }
 
         return $this;
-    }
-
-    public function acceptsDelete(): self
-    {
-        return $this->addMethod('DELETE');
     }
 
     public function controller(string $controller): self
@@ -111,9 +111,24 @@ class Route extends SymfonyRoute
         // need to figure out what's accepted here
     }
 
-    public function noCache(): self
+    public function requiresAllPermissions(array $permissions): self
     {
-        return $this->setOption('no_cache', 'TRUE');
+        return $this->setRequirement('_permission', implode(',', $permissions));
+    }
+
+    public function requiresAnyPermission(array $permissions): self
+    {
+        return $this->setRequirement('_permission', implode('+', $permissions));
+    }
+
+    public function requiresAllRoles(array $roles): self
+    {
+        return $this->setRequirement('_role', implode(',', $roles));
+    }
+
+    public function requiresAnyRoles(array $roles): self
+    {
+        return $this->setRequirement('_role', implode('+', $roles));
     }
 
     public function defaultAccess(): self
@@ -124,6 +139,11 @@ class Route extends SymfonyRoute
     public function accessCallback(string $accessCheck): self
     {
         return $this->setRequirement('_custom_access', $accessCheck);
+    }
+
+    public function noCache(): self
+    {
+        return $this->setOption('no_cache', 'TRUE');
     }
 
     private function addMethod(string $method): self
