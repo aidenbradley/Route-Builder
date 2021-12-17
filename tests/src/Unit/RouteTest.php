@@ -410,6 +410,30 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function only_accepts_json(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_content_type_format'));
+
+        $route->onlyAcceptsJson();
+
+        $this->assertEquals('json', $route->getRequirement('_content_type_format'));
+    }
+
+    /** @test */
+    public function onyl_accepts_xml(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_content_type_format'));
+
+        $route->onlyAcceptsXml();
+
+        $this->assertEquals('xml', $route->getRequirement('_content_type_format'));
+    }
+
+    /** @test */
     public function xml_format(): void
     {
         $route = Route::get('/');

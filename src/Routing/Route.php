@@ -185,6 +185,17 @@ class Route extends SymfonyRoute
         return $this->setRequirement('_format', $format);
     }
 
+    /** Need to add other helper methods for the content type format header */
+    public function onlyAcceptsJson(): self
+    {
+        return $this->setRequirement('_content_type_format', 'json');
+    }
+
+    public function onlyAcceptsXml(): self
+    {
+        return $this->setRequirement('_content_type_format', 'xml');
+    }
+
     public function noCache(): self
     {
         return $this->setOption('no_cache', 'TRUE');
