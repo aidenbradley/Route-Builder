@@ -301,6 +301,65 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function entity_access(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_entity_access'));
+
+        $route->entityAccess('node.view');
+
+        $this->assertEquals('node.view', $route->getRequirement('_entity_access'));
+    }
+
+    /** @test */
+    public function entity_validaton(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('node'));
+
+        $route->entityValidation('node', '\d+');
+
+        $this->assertEquals('\d+', $route->getRequirement('node'));
+    }
+
+    /** @test */
+    public function entity_bundles(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_entity_bundles'));
+
+        $route->entityBundles('node', 'article');
+
+        $this->assertEquals('node:article', $route->getRequirement('_entity_bundles'));
+
+        $route->entityBundles('node', [
+            'article',
+            'page'
+        ]);
+
+        $this->assertEquals('node:article|page', $route->getRequirement('_entity_bundles'));
+    }
+
+    /** @test */
+    public function entity_create_access(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_entity_create_access'));
+
+        $route->entityCreateAccess('node', 'article');
+
+        $this->assertEquals('node:article', $route->getRequirement('_entity_create_access'));
+
+        $route->entityCreateAccess('node', '{route_parameter}');
+
+        $this->assertEquals('node:{route_parameter}', $route->getRequirement('_entity_create_access'));
+    }
+
+    /** @test */
     public function access_callback()
     {
         $route = Route::get('/');

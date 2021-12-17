@@ -136,6 +136,30 @@ class Route extends SymfonyRoute
         return $this->setRequirement('_access', 'TRUE');
     }
 
+    public function entityAccess(string $entityAccess): self
+    {
+        return $this->setRequirement('_entity_access', $entityAccess);
+    }
+
+    public function entityValidation(string $entityTypeId, string $regex): self
+    {
+        return $this->setRequirement($entityTypeId, $regex);
+    }
+
+    /** @param string|array $bundles */
+    public function entityBundles(string $entityTypeId, $bundles): self
+    {
+        return $this->setRequirement(
+            '_entity_bundles',
+            $entityTypeId . ':' . implode('|', (array) $bundles)
+        );
+    }
+
+    public function entityCreateAccess(string $entityTypeId, string $bundleOrRouteParam): self
+    {
+        return $this->setRequirement('_entity_create_access', $entityTypeId . ':' . $bundleOrRouteParam);
+    }
+
     public function accessCallback(string $accessCheck): self
     {
         return $this->setRequirement('_custom_access', $accessCheck);
