@@ -499,14 +499,79 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
-    public function requires_authentication(): void
+    public function requires_login_to_access(): void
     {
         $route = Route::get('/');
 
         $this->assertFalse((bool) $route->getRequirement('_user_is_logged_in'));
 
-        $route->requiresAuthentication();
+        $route->requiresLoginToAccess();
 
         $this->assertTrue((bool) $route->getRequirement('_user_is_logged_in'));
+    }
+
+    /** @test */
+    public function is_admin_route(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse((bool) $route->getOption('_admin_route'));
+
+        $route->isAdminRoute();
+
+        $this->assertTrue((bool) $route->getOption('_admin_route'));
+    }
+
+    /** @test */
+    public function requires_authentication(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getOption('_auth'));
+
+        $route->requiresAuthentication('basic_auth');
+
+        $this->assertEquals(['basic_auth'], $route->getOption('_auth'));
+
+        $route->requiresAuthentication('cookie');
+
+        $this->assertEquals([
+            'basic_auth',
+            'cookie',
+        ], $route->getOption('_auth'));
+
+        $route = Route::get('/')->requiresAuthentication([
+            'basic_auth',
+            'cookie',
+        ]);
+
+        $this->assertEquals([
+            'basic_auth',
+            'cookie',
+        ], $route->getOption('_auth'));
+    }
+
+    /** @test */
+    public function requires_basic_auth(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getOption('_auth'));
+
+        $route->requiresBasicAuth();
+
+        $this->assertEquals(['basic_auth'], $route->getOption('_auth'));
+    }
+
+    /** @test */
+    public function requires_cookie_auth(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getOption('_auth'));
+
+        $route->requiresCookieAuth();
+
+        $this->assertEquals(['cookie'], $route->getOption('_auth'));
     }
 }

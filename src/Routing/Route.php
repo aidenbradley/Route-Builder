@@ -229,14 +229,52 @@ class Route extends SymfonyRoute
         return $this->setRequirement('_access_user_register', 'TRUE');
     }
 
-    public function requiresAuthentication(): self
+    public function requiresLoginToAccess(): self
     {
         return $this->setRequirement('_user_is_logged_in', 'TRUE');
+    }
+
+    public function isAdminRoute(): self
+    {
+        return $this->setOption('_admin_route', 'TRUE');
+    }
+
+    public function requiresBasicAuth(): self
+    {
+        return $this->addAuthMechanism('basic_auth');
+    }
+
+    public function requiresCookieAuth(): self
+    {
+        return $this->addAuthMechanism('cookie');
+    }
+
+    /** @param string|array $authMechanisms */
+    public function requiresAuthentication($authMechanisms): self
+    {
+        foreach ((array) $authMechanisms as $authMechanism) {
+            $this->addAuthMechanism($authMechanism);
+        }
+
+        return $this;
     }
 
     public function noCache(): self
     {
         return $this->setOption('no_cache', 'TRUE');
+    }
+
+    private function addAuthMechanism(string $authMechanism): self
+    {
+        $authOption = $this->getOption('_auth');
+
+        if ($authOption !== null) {
+            $authMechanism = array_merge($this->getOption('_auth'), [
+                $authMechanism
+            ]);
+        }
+
+        return $this->setOption('_auth', (array) $authMechanism);
     }
 
     private function addMethod(string $method): self
