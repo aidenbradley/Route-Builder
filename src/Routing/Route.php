@@ -275,7 +275,6 @@ class Route extends SymfonyRoute
         return $this->setOption('no_cache', 'TRUE');
     }
 
-    // @TODO add test coverage for parameter converters and review documentation
     public function setParameterConverter(string $paramName, string $convertName): self
     {
         $paramConverters = [
