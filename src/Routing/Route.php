@@ -62,6 +62,21 @@ class Route extends SymfonyRoute
         return $this->setDefault('_entity_form', $entityForm);
     }
 
+    public function title(string $title): self
+    {
+        return $this->setDefault('_title', $title);
+    }
+
+    public function titleCallback(string $callback): self
+    {
+        return $this->setDefault('_title_callback', $callback);
+    }
+
+    public function titleArguments(): void
+    {
+        // need to figure out what's accepted here
+    }
+
     public function noCache(): self
     {
         return $this->setOption('no_cache', 'TRUE');

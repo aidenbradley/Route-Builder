@@ -110,6 +110,32 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function title(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getDefault('_title'));
+
+        $route = Route::get('/')->title('my_title');
+
+        $this->assertEquals('my_title', $route->getDefault('_title'));
+    }
+
+    /** @test */
+    public function title_callback(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getDefault('_title_callback'));
+
+        $titleCallback = get_class($this) . '::getTitle';
+
+        $route = Route::get('/')->titleCallback($titleCallback);
+
+        $this->assertEquals($titleCallback, $route->getDefault('_title_callback'));
+    }
+
+    /** @test */
     public function no_cache(): void
     {
         $route = Route::get('/');
