@@ -485,4 +485,28 @@ class RouteTest extends UnitTestCase
 
         $this->assertTrue((bool) $route->getRequirement('_csrf_request_header_token'));
     }
+
+    /** @test */
+    public function access_user_register(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse((bool) $route->getRequirement('_access_user_register'));
+
+        $route->accessUserRegister();
+
+        $this->assertTrue((bool) $route->getRequirement('_access_user_register'));
+    }
+
+    /** @test */
+    public function requires_authentication(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertFalse((bool) $route->getRequirement('_user_is_logged_in'));
+
+        $route->requiresAuthentication();
+
+        $this->assertTrue((bool) $route->getRequirement('_user_is_logged_in'));
+    }
 }

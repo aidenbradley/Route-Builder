@@ -217,6 +217,23 @@ class Route extends SymfonyRoute
         return $this->setRequirement('_csrf_request_header_token', 'TRUE');
     }
 
+    /*
+     * Need to figure out a better name for this. Description is as follows -
+     *
+     * Set this to 'TRUE' (with the single quotes) to have access granted to the
+     * route if the user is anonymous AND user registration is not set to
+     * "Administrators only" on the site.
+     */
+    public function accessUserRegister(): self
+    {
+        return $this->setRequirement('_access_user_register', 'TRUE');
+    }
+
+    public function requiresAuthentication(): self
+    {
+        return $this->setRequirement('_user_is_logged_in', 'TRUE');
+    }
+
     public function noCache(): self
     {
         return $this->setOption('no_cache', 'TRUE');
