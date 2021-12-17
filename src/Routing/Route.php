@@ -14,27 +14,27 @@ class Route extends SymfonyRoute
 
     public static function get(string $path): self
     {
-        return static::create($path)->setMethods((array) 'GET');
+        return static::create($path)->acceptsGet();
     }
 
     public static function put(string $path): self
     {
-        return static::create($path)->setMethods((array) 'PUT');
+        return static::create($path)->acceptsPut();
     }
 
     public static function patch(string $path): self
     {
-        return static::create($path)->setMethods((array) 'PATCH');
+        return static::create($path)->acceptsPatch();
     }
 
     public static function post(string $path): self
     {
-        return static::create($path)->setMethods((array) 'POST');
+        return static::create($path)->acceptsPost();
     }
 
     public static function delete(string $path): self
     {
-        return static::create($path)->setMethods((array) 'DELETE');
+        return static::create($path)->acceptsDelete();
     }
 
     public function acceptsGet(): self
