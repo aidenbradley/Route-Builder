@@ -384,7 +384,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getRequirement('_format'));
 
-        $route->format('json');
+        $route->returnsFormat('json');
 
         $this->assertEquals('json', $route->getRequirement('_format'));
     }
@@ -396,7 +396,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getRequirement('_format'));
 
-        $route->jsonFormat();
+        $route->returnsJsonFormat();
 
         $this->assertEquals('json', $route->getRequirement('_format'));
     }
@@ -408,7 +408,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getRequirement('_format'));
 
-        $route->htmlFormat();
+        $route->returnsHtmlFormat();
 
         $this->assertEquals('html', $route->getRequirement('_format'));
     }
@@ -456,7 +456,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getRequirement('_format'));
 
-        $route->xmlFormat();
+        $route->returnsXmlFormat();
 
         $this->assertEquals('xml', $route->getRequirement('_format'));
     }

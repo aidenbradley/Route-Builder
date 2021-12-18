@@ -207,22 +207,22 @@ class Route extends SymfonyRoute
         return $this->getDefinition()->setRequirement('_custom_access', $accessCheck);
     }
 
-    public function jsonFormat(): self
+    public function returnsJsonFormat(): self
     {
-        return $this->getDefinition()->format('json');
+        return $this->getDefinition()->returnsFormat('json');
     }
 
-    public function htmlFormat(): self
+    public function returnsHtmlFormat(): self
     {
-        return $this->getDefinition()->format('html');
+        return $this->getDefinition()->returnsFormat('html');
     }
 
-    public function xmlFormat(): self
+    public function returnsXmlFormat(): self
     {
-        return $this->getDefinition()->format('xml');
+        return $this->getDefinition()->returnsFormat('xml');
     }
 
-    public function format(string $format): self
+    public function returnsFormat(string $format): self
     {
         return $this->getDefinition()->setRequirement('_format', $format);
     }
