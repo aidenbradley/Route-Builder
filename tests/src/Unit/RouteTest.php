@@ -839,8 +839,14 @@ class RouteTest extends UnitTestCase
                 'view content',
             ]);
 
-        $this->assertEquals($symfonyRoute->getPath(), $route->getPath());
-        $this->assertEquals($symfonyRoute->getMethods(), $route->getMethods());
+        $this->assertEquals(
+            $symfonyRoute->getPath(),
+            $route->getPath()
+        );
+        $this->assertEquals(
+            $symfonyRoute->getMethods(),
+            $route->getMethods()
+        );
         $this->assertEquals(
             $symfonyRoute->getDefault('_controller'),
             $route->getDefault('_controller')
