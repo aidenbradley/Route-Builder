@@ -414,6 +414,18 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function set_content_type_format(): void
+    {
+        $route = Route::get('/');
+
+        $this->assertEmpty($route->getRequirement('_content_type_format'));
+
+        $route->setContentTypeFormat('bin');
+
+        $this->assertEquals('bin', $route->getRequirement('_content_type_format'));
+    }
+
+    /** @test */
     public function only_accepts_json(): void
     {
         $route = Route::get('/');
