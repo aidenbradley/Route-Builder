@@ -825,7 +825,7 @@ class RouteTest extends UnitTestCase
                 ],
             ]);
 
-        $route = Route::get('node.page', '/page{node}')
+        $route = Route::get('node.page', '/page/{node}')
             ->controller('\Drupal\controller\Controller', 'view')
             ->title('View page')
             ->defaultParamValue('node', '1')
@@ -839,6 +839,7 @@ class RouteTest extends UnitTestCase
                 'view content',
             ]);
 
+        $this->assertEquals($symfonyRoute->getPath(), $route->getPath());
         $this->assertEquals($symfonyRoute->getMethods(), $route->getMethods());
         $this->assertEquals(
             $symfonyRoute->getDefault('_controller'),
