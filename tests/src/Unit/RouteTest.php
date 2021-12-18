@@ -10,7 +10,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function get(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertTrue(in_array('GET', $route->getMethods()));
     }
@@ -18,7 +18,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function accepts_get(): void
     {
-        $route = Route::post('/');
+        $route = Route::post(__FUNCTION__, '/');
 
         $this->assertFalse(in_array('GET', $route->getMethods()));
 
@@ -30,7 +30,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function post(): void
     {
-        $route = Route::post('/');
+        $route = Route::post(__FUNCTION__, '/');
 
         $this->assertTrue(in_array('POST', $route->getMethods()));
     }
@@ -38,7 +38,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function accepts_post(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse(in_array('POST', $route->getMethods()));
 
@@ -50,7 +50,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function patch(): void
     {
-        $route = Route::patch('/');
+        $route = Route::patch(__FUNCTION__, '/');
 
         $this->assertTrue(in_array('PATCH', $route->getMethods()));
     }
@@ -58,7 +58,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function accepts_patch(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse(in_array('PATCH', $route->getMethods()));
 
@@ -70,7 +70,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function put(): void
     {
-        $route = Route::put('/');
+        $route = Route::put(__FUNCTION__, '/');
 
         $this->assertTrue(in_array('PUT', $route->getMethods()));
     }
@@ -78,7 +78,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function accepts_put(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse(in_array('PUT', $route->getMethods()));
 
@@ -90,7 +90,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function delete(): void
     {
-        $route = Route::delete('/');
+        $route = Route::delete(__FUNCTION__, '/');
 
         $this->assertTrue(in_array('DELETE', $route->getMethods()));
     }
@@ -98,7 +98,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function accepts_delete(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse(in_array('DELETE', $route->getMethods()));
 
@@ -110,7 +110,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function accepts_methods(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEquals([
             'GET'
@@ -135,13 +135,13 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function controller(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getDefault('_controller'));
 
         $controller = '\Drupal\controller\Controller';
 
-        $route = Route::get('/')->controller($controller, 'render');
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->controller($controller, 'render');
 
         $this->assertEquals($controller . '::render', $route->getDefault('_controller'));
 
@@ -153,11 +153,11 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function form(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getDefault('_form'));
 
-        $route = Route::get('/')->form('my_form');
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->form('my_form');
 
         $this->assertEquals('my_form', $route->getDefault('_form'));
     }
@@ -165,11 +165,11 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function entity_view(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getDefault('_entity_view'));
 
-        $route = Route::get('/')->entityView('entity_view');
+        $route = Route::get(__FUNCTION__. '_new_route', '/')->entityView('entity_view');
 
         $this->assertEquals('entity_view', $route->getDefault('_entity_view'));
     }
@@ -177,11 +177,11 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function entity_list(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getDefault('_entity_list'));
 
-        $route = Route::get('/')->entityList('entity_list');
+        $route = Route::get(__FUNCTION__. '_new_route', '/')->entityList('entity_list');
 
         $this->assertEquals('entity_list', $route->getDefault('_entity_list'));
     }
@@ -189,11 +189,11 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function entity_form(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getDefault('_entity_form'));
 
-        $route = Route::get('/')->entityForm('entity_form');
+        $route = Route::get(__FUNCTION__. '_new_route', '/')->entityForm('entity_form');
 
         $this->assertEquals('entity_form', $route->getDefault('_entity_form'));
     }
@@ -201,11 +201,11 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function title(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getDefault('_title'));
 
-        $route = Route::get('/')->title('my_title');
+        $route = Route::get(__FUNCTION__. '_new_route', '/')->title('my_title');
 
         $this->assertEquals('my_title', $route->getDefault('_title'));
     }
@@ -213,7 +213,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function parameter_default_value(): void
     {
-        $route = Route::get('/route/{param}');
+        $route = Route::get(__FUNCTION__, '/route/{param}');
 
         $this->assertEmpty($route->getDefault('param'));
 
@@ -225,13 +225,13 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function title_callback(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getDefault('_title_callback'));
 
         $titleCallback = get_class($this) . '::getTitle';
 
-        $route = Route::get('/')->titleCallback($titleCallback);
+        $route = Route::get(__FUNCTION__. '_new_route', '/')->titleCallback($titleCallback);
 
         $this->assertEquals($titleCallback, $route->getDefault('_title_callback'));
     }
@@ -245,7 +245,7 @@ class RouteTest extends UnitTestCase
             'third_permission',
         ];
 
-        $route = Route::get('/')->requiresAllPermissions($permissions);
+        $route = Route::get(__FUNCTION__, '/')->requiresAllPermissions($permissions);
 
         $this->assertEquals(implode(',', $permissions), $route->getRequirement('_permission'));
     }
@@ -259,7 +259,7 @@ class RouteTest extends UnitTestCase
             'third_permission',
         ];
 
-        $route = Route::get('/')->requiresAnyPermission($permissions);
+        $route = Route::get(__FUNCTION__, '/')->requiresAnyPermission($permissions);
 
         $this->assertEquals(implode('+', $permissions), $route->getRequirement('_permission'));
     }
@@ -273,7 +273,7 @@ class RouteTest extends UnitTestCase
             'third_role',
         ];
 
-        $route = Route::get('/')->requiresAllRoles($roles);
+        $route = Route::get(__FUNCTION__, '/')->requiresAllRoles($roles);
 
         $this->assertEquals(implode(',', $roles), $route->getRequirement('_role'));
     }
@@ -287,15 +287,15 @@ class RouteTest extends UnitTestCase
             'third_role',
         ];
 
-        $route = Route::get('/')->requiresAnyRoles($roles);
+        $route = Route::get(__FUNCTION__, '/')->requiresAnyRoles($roles);
 
         $this->assertEquals(implode('+', $roles), $route->getRequirement('_role'));
     }
 
     /** @test */
-    public function default_access()
+    public function default_access(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse((bool) $route->getRequirement('_access'));
 
@@ -307,7 +307,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function entity_access(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_entity_access'));
 
@@ -319,7 +319,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function entity_validaton(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('node'));
 
@@ -331,7 +331,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function entity_bundles(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_entity_bundles'));
 
@@ -350,7 +350,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function entity_create_access(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_entity_create_access'));
 
@@ -364,9 +364,9 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
-    public function access_callback()
+    public function access_callback(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_custom_access'));
 
@@ -380,7 +380,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function format(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_format'));
 
@@ -392,7 +392,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function json_format(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_format'));
 
@@ -404,7 +404,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function html_format(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_format'));
 
@@ -416,7 +416,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function set_content_type_format(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_content_type_format'));
 
@@ -428,7 +428,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function only_accepts_json(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_content_type_format'));
 
@@ -440,7 +440,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function onyl_accepts_xml(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_content_type_format'));
 
@@ -452,7 +452,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function xml_format(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_format'));
 
@@ -464,7 +464,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function depends_on_all_modules(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_module_dependencies'));
 
@@ -481,7 +481,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function depends_on_any_modules(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getRequirement('_module_dependencies'));
 
@@ -498,7 +498,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function uses_csrf(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse((bool) $route->getRequirement('_csrf_token'));
 
@@ -510,7 +510,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function requires_csrf_token_header(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse((bool) $route->getRequirement('_csrf_request_header_token'));
 
@@ -522,7 +522,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function access_user_register(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse((bool) $route->getRequirement('_access_user_register'));
 
@@ -534,7 +534,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function requires_login_to_access(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse((bool) $route->getRequirement('_user_is_logged_in'));
 
@@ -546,7 +546,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function is_admin_route(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse((bool) $route->getOption('_admin_route'));
 
@@ -558,7 +558,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function requires_authentication(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getOption('_auth'));
 
@@ -573,7 +573,7 @@ class RouteTest extends UnitTestCase
             'cookie',
         ], $route->getOption('_auth'));
 
-        $route = Route::get('/')->requiresAuthentication([
+        $route = Route::get(__FUNCTION__. '_new_route', '/')->requiresAuthentication([
             'basic_auth',
             'cookie',
         ]);
@@ -587,7 +587,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function requires_basic_auth(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getOption('_auth'));
 
@@ -599,7 +599,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function requires_cookie_auth(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getOption('_auth'));
 
@@ -611,7 +611,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function accessible_during_maintenance(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse((bool) $route->getOption('_maintenance_access'));
 
@@ -623,7 +623,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function theme(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertEmpty($route->getOption('_theme'));
 
@@ -635,7 +635,7 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function no_cache(): void
     {
-        $route = Route::get('/');
+        $route = Route::get(__FUNCTION__, '/');
 
         $this->assertFalse((bool) $route->getOption('no_cache'));
 
@@ -645,9 +645,9 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
-    public function set_parameter_converter()
+    public function set_parameter_converter(): void
     {
-        $route = Route::get('/page/{node}/{another_param}');
+        $route = Route::get(__FUNCTION__, '/page/{node}/{another_param}');
 
         $this->assertEmpty($route->getOption('parameters'));
 
@@ -672,9 +672,9 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
-    public function override_defined_parameter_converter()
+    public function override_defined_parameter_converter(): void
     {
-        $route = Route::get('/page/{node}/{another_param}');
+        $route = Route::get(__FUNCTION__, '/page/{node}/{another_param}');
 
         $this->assertEmpty($route->getOption('parameters'));
 
@@ -693,5 +693,23 @@ class RouteTest extends UnitTestCase
                 'type' => 'entity:media',
             ],
         ], $route->getOption('parameters'));
+    }
+
+    /** @test */
+    public function multi_route(): void
+    {
+        $getRoute = Route::get('route.get', '/route/get');
+        $patchRoute = Route::patch('route.patch', '/route/patch');
+        $postRoute = Route::post('route.post', '/route/post');
+        $putRoute = Route::put('route.put', '/route/put');
+        $deleteRoute = Route::delete('route.delete', '/route/delete');
+
+        $this->assertEquals([
+            'route.get' => $getRoute,
+            'route.patch' => $patchRoute,
+            'route.post' => $postRoute,
+            'route.put' => $putRoute,
+            'route.delete' => $deleteRoute,
+        ], Route::toArray());
     }
 }

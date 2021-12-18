@@ -6,71 +6,80 @@ use Symfony\Component\Routing\Route as SymfonyRoute;
 
 class Route extends SymfonyRoute
 {
+    /** @var array */
+    private static $routes = [];
+
     /** @return static */
-    public static function create(string $path)
+    public static function create(string $routeName, string $path)
     {
-        return new static($path);
+        if (isset(static::$routes[$routeName])) {
+            throw new \Exception($routeName . ' is already defined');
+        }
+
+        static::$routes[$routeName] = new static($path);
+
+        return end(static::$routes);
     }
 
     /** @return static */
-    public static function get(string $path)
+    public static function get(string $routeName, string $path)
     {
-        return static::create($path)->acceptsGet();
+        return static::create($routeName, $path)->acceptsGet();
     }
 
     /** @return static */
-    public static function put(string $path)
+    public static function put(string $routeName, string $path)
     {
-        return static::create($path)->acceptsPut();
+        return static::create($routeName, $path)->acceptsPut();
     }
 
     /** @return static */
-    public static function patch(string $path)
+    public static function patch(string $routeName, string $path)
     {
-        return static::create($path)->acceptsPatch();
+        return static::create($routeName, $path)->acceptsPatch();
     }
 
     /** @return static */
-    public static function post(string $path)
+    public static function post(string $routeName, string $path)
     {
-        return static::create($path)->acceptsPost();
+        return static::create($routeName, $path)->acceptsPost();
     }
 
     /** @return static */
-    public static function delete(string $path)
+    public static function delete(string $routeName, string $path)
     {
-        return static::create($path)->acceptsDelete();
+        return static::create($routeName, $path)->acceptsDelete();
     }
 
     public function acceptsGet(): self
     {
-        return $this->addMethod('GET');
+        return $this->getRouteDefinition()->addMethod('GET');
     }
 
     public function acceptsPost(): self
     {
-        return $this->addMethod('POST');
+        return $this->getRouteDefinition()->addMethod('POST');
     }
 
     public function acceptsPatch(): self
     {
-        return $this->addMethod('PATCH');
+        return $this->getRouteDefinition()->addMethod('PATCH');
     }
 
     public function acceptsPut(): self
     {
-        return $this->addMethod('PUT');
+        return $this->getRouteDefinition()->addMethod('PUT');
     }
 
     public function acceptsDelete(): self
     {
-        return $this->addMethod('DELETE');
+        return $this->getRouteDefinition()->addMethod('DELETE');
     }
 
     public function acceptsMethods(array $methods): self
     {
         foreach ($methods as $method) {
-            $this->addMethod($method);
+            $this->getRouteDefinition()->addMethod($method);
         }
 
         return $this;
@@ -78,42 +87,42 @@ class Route extends SymfonyRoute
 
     public function controller(string $controller, string $method = '__invoke'): self
     {
-        return $this->setDefault('_controller', $controller . '::' . $method);
+        return $this->getRouteDefinition()->setDefault('_controller', $controller . '::' . $method);
     }
 
     public function form(string $form): self
     {
-        return $this->setDefault('_form', $form);
+        return $this->getRouteDefinition()->setDefault('_form', $form);
     }
 
     public function entityView(string $entityView): self
     {
-        return $this->setDefault('_entity_view', $entityView);
+        return $this->getRouteDefinition()->setDefault('_entity_view', $entityView);
     }
 
     public function entityList(string $entityList): self
     {
-        return $this->setDefault('_entity_list', $entityList);
+        return $this->getRouteDefinition()->setDefault('_entity_list', $entityList);
     }
 
     public function entityForm(string $entityForm): self
     {
-        return $this->setDefault('_entity_form', $entityForm);
+        return $this->getRouteDefinition()->setDefault('_entity_form', $entityForm);
     }
 
     public function title(string $title): self
     {
-        return $this->setDefault('_title', $title);
+        return $this->getRouteDefinition()->setDefault('_title', $title);
     }
 
     public function parameterDefaultValue(string $parameter, string $defaultValue): self
     {
-        return $this->setDefault($parameter, $defaultValue);
+        return $this->getRouteDefinition()->setDefault($parameter, $defaultValue);
     }
 
     public function titleCallback(string $callback): self
     {
-        return $this->setDefault('_title_callback', $callback);
+        return $this->getRouteDefinition()->setDefault('_title_callback', $callback);
     }
 
     public function titleArguments(): void
@@ -123,43 +132,43 @@ class Route extends SymfonyRoute
 
     public function requiresAllPermissions(array $permissions): self
     {
-        return $this->setRequirement('_permission', implode(',', $permissions));
+        return $this->getRouteDefinition()->setRequirement('_permission', implode(',', $permissions));
     }
 
     public function requiresAnyPermission(array $permissions): self
     {
-        return $this->setRequirement('_permission', implode('+', $permissions));
+        return $this->getRouteDefinition()->setRequirement('_permission', implode('+', $permissions));
     }
 
     public function requiresAllRoles(array $roles): self
     {
-        return $this->setRequirement('_role', implode(',', $roles));
+        return $this->getRouteDefinition()->setRequirement('_role', implode(',', $roles));
     }
 
     public function requiresAnyRoles(array $roles): self
     {
-        return $this->setRequirement('_role', implode('+', $roles));
+        return $this->getRouteDefinition()->setRequirement('_role', implode('+', $roles));
     }
 
     public function defaultAccess(): self
     {
-        return $this->setRequirement('_access', 'TRUE');
+        return $this->getRouteDefinition()->setRequirement('_access', 'TRUE');
     }
 
     public function entityAccess(string $entityAccess): self
     {
-        return $this->setRequirement('_entity_access', $entityAccess);
+        return $this->getRouteDefinition()->setRequirement('_entity_access', $entityAccess);
     }
 
     public function entityValidation(string $entityTypeId, string $regex): self
     {
-        return $this->setRequirement($entityTypeId, $regex);
+        return $this->getRouteDefinition()->setRequirement($entityTypeId, $regex);
     }
 
     /** @param string|array $bundles */
     public function entityBundles(string $entityTypeId, $bundles): self
     {
-        return $this->setRequirement(
+        return $this->getRouteDefinition()->setRequirement(
             '_entity_bundles',
             $entityTypeId . ':' . implode('|', (array) $bundles)
         );
@@ -167,68 +176,68 @@ class Route extends SymfonyRoute
 
     public function entityCreateAccess(string $entityTypeId, string $bundleOrRouteParam): self
     {
-        return $this->setRequirement('_entity_create_access', $entityTypeId . ':' . $bundleOrRouteParam);
+        return $this->getRouteDefinition()->setRequirement('_entity_create_access', $entityTypeId . ':' . $bundleOrRouteParam);
     }
 
     public function customAccessCallback(string $accessCheck): self
     {
-        return $this->setRequirement('_custom_access', $accessCheck);
+        return $this->getRouteDefinition()->setRequirement('_custom_access', $accessCheck);
     }
 
     public function jsonFormat(): self
     {
-        return $this->format('json');
+        return $this->getRouteDefinition()->format('json');
     }
 
     public function htmlFormat(): self
     {
-        return $this->format('html');
+        return $this->getRouteDefinition()->format('html');
     }
 
     public function xmlFormat(): self
     {
-        return $this->format('xml');
+        return $this->getRouteDefinition()->format('xml');
     }
 
     public function format(string $format): self
     {
-        return $this->setRequirement('_format', $format);
+        return $this->getRouteDefinition()->setRequirement('_format', $format);
     }
 
     public function onlyAcceptsJson(): self
     {
-        return $this->setContentTypeFormat('json');
+        return $this->getRouteDefinition()->setContentTypeFormat('json');
     }
 
     public function onlyAcceptsXml(): self
     {
-        return $this->setContentTypeFormat('xml');
+        return $this->getRouteDefinition()->setContentTypeFormat('xml');
     }
 
     public function setContentTypeFormat(string $contentTypeFormat): self
     {
-        return $this->setRequirement('_content_type_format', $contentTypeFormat);
+        return $this->getRouteDefinition()->setRequirement('_content_type_format', $contentTypeFormat);
     }
 
     public function dependsOnAllModules(array $modules): self
     {
-        return $this->setRequirement('_module_dependencies', implode(',', $modules));
+        return $this->getRouteDefinition()->setRequirement('_module_dependencies', implode(',', $modules));
     }
 
     /** @param string|array $modules */
     public function dependsOnAnyModule($modules): self
     {
-        return $this->setRequirement('_module_dependencies', implode('+', $modules));
+        return $this->getRouteDefinition()->setRequirement('_module_dependencies', implode('+', $modules));
     }
 
     public function usesCsrf(): self
     {
-        return $this->setRequirement('_csrf_token', 'TRUE');
+        return $this->getRouteDefinition()->setRequirement('_csrf_token', 'TRUE');
     }
 
     public function requiresCsrfTokenHeader(): self
     {
-        return $this->setRequirement('_csrf_request_header_token', 'TRUE');
+        return $this->getRouteDefinition()->setRequirement('_csrf_request_header_token', 'TRUE');
     }
 
     /*
@@ -240,34 +249,34 @@ class Route extends SymfonyRoute
      */
     public function accessUserRegister(): self
     {
-        return $this->setRequirement('_access_user_register', 'TRUE');
+        return $this->getRouteDefinition()->setRequirement('_access_user_register', 'TRUE');
     }
 
     public function requiresLoginToAccess(): self
     {
-        return $this->setRequirement('_user_is_logged_in', 'TRUE');
+        return $this->getRouteDefinition()->setRequirement('_user_is_logged_in', 'TRUE');
     }
 
     public function isAdminRoute(): self
     {
-        return $this->setOption('_admin_route', 'TRUE');
+        return $this->getRouteDefinition()->setOption('_admin_route', 'TRUE');
     }
 
     public function requiresBasicAuth(): self
     {
-        return $this->addAuthMechanism('basic_auth');
+        return $this->getRouteDefinition()->addAuthMechanism('basic_auth');
     }
 
     public function requiresCookieAuth(): self
     {
-        return $this->addAuthMechanism('cookie');
+        return $this->getRouteDefinition()->addAuthMechanism('cookie');
     }
 
     /** @param string|array $authMechanisms */
     public function requiresAuthentication($authMechanisms): self
     {
         foreach ((array) $authMechanisms as $authMechanism) {
-            $this->addAuthMechanism($authMechanism);
+            $this->getRouteDefinition()->addAuthMechanism($authMechanism);
         }
 
         return $this;
@@ -275,18 +284,18 @@ class Route extends SymfonyRoute
 
     public function accessableDuringMaintenance(): self
     {
-        return $this->setOption('_maintenance_access', 'TRUE');
+        return $this->getRouteDefinition()->setOption('_maintenance_access', 'TRUE');
     }
 
     // need to find documentation on this
     public function theme(string $theme): self
     {
-        return $this->setOption('_theme', $theme);
+        return $this->getRouteDefinition()->setOption('_theme', $theme);
     }
 
     public function noCache(): self
     {
-        return $this->setOption('no_cache', 'TRUE');
+        return $this->getRouteDefinition()->setOption('no_cache', 'TRUE');
     }
 
     public function setParameterConverter(string $paramName, string $convertName): self
@@ -297,30 +306,40 @@ class Route extends SymfonyRoute
             ],
         ];
 
-        if ($this->getOption('parameters') !== null) {
-            $paramConverters = array_merge($this->getOption('parameters'), $paramConverters);
+        if ($this->getRouteDefinition()->getOption('parameters') !== null) {
+            $paramConverters = array_merge($this->getRouteDefinition()->getOption('parameters'), $paramConverters);
         }
 
-        return $this->setOption('parameters', $paramConverters);
+        return $this->getRouteDefinition()->setOption('parameters', $paramConverters);
+    }
+
+    public function getRouteDefinition(): Route
+    {
+        return end(static::$routes);
     }
 
     private function addAuthMechanism(string $authMechanism): self
     {
-        $authOption = $this->getOption('_auth');
+        $authOption = $this->getRouteDefinition()->getOption('_auth');
 
         if ($authOption !== null) {
-            $authMechanism = array_merge($this->getOption('_auth'), [
+            $authMechanism = array_merge($this->getRouteDefinition()->getOption('_auth'), [
                 $authMechanism
             ]);
         }
 
-        return $this->setOption('_auth', (array) $authMechanism);
+        return $this->getRouteDefinition()->setOption('_auth', (array) $authMechanism);
     }
 
     private function addMethod(string $method): self
     {
-        return $this->setMethods(array_merge($this->getMethods(), [
+        return $this->getRouteDefinition()->setMethods(array_merge($this->getRouteDefinition()->getMethods(), [
             $method
         ]));
+    }
+
+    public static function toArray(): array
+    {
+        return static::$routes;
     }
 }
