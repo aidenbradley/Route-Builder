@@ -352,6 +352,23 @@ class Route extends SymfonyRoute
         return $this->getDefinition()->setOption('parameters', $paramConverters);
     }
 
+    public function setEntityParameterConverter(string $paramName, string $convertToEntity): self
+    {
+        $paramConverters = [
+            $paramName => [
+                'type' => 'entity:' . $convertToEntity,
+            ],
+        ];
+
+        $parameters = $this->getDefinition()->getOption('parameters');
+
+        if ($parameters !== null) {
+            $paramConverters = array_merge($parameters, $paramConverters);
+        }
+
+        return $this->getDefinition()->setOption('parameters', $paramConverters);
+    }
+
     /** Gets the current route definition */
     public function getDefinition(): Route
     {

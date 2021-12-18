@@ -701,6 +701,22 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function set_entity_parameter_converter(): void
+    {
+        $route = Route::get(__FUNCTION__, '/page/{node}/{another_param}');
+
+        $this->assertEmpty($route->getOption('parameters'));
+
+        $route->setEntityParameterConverter('node', 'node');
+
+        $this->assertEquals([
+            'node' => [
+                'type' => 'entity:node',
+            ]
+        ], $route->getOption('parameters'));
+    }
+
+    /** @test */
     public function override_defined_parameter_converter(): void
     {
         $route = Route::get(__FUNCTION__, '/page/{node}/{another_param}');
@@ -816,7 +832,7 @@ class RouteTest extends UnitTestCase
             ->requiresRole('editor')
             ->dependsOnModule('node')
             ->requiresLoginToAccess()
-            ->setParameterConverter('node', 'entity:node')
+            ->setEntityParameterConverter('node', 'node')
             ->noCache()
             ->requiresAllPermissions([
                 'access content',
