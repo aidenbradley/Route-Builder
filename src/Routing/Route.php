@@ -6,33 +6,38 @@ use Symfony\Component\Routing\Route as SymfonyRoute;
 
 class Route extends SymfonyRoute
 {
-    public static function create(string $path): self
+    /** @return static */
+    public static function create(string $path)
     {
-        /** @phpstan-ignore-next-line */
         return new static($path);
     }
 
-    public static function get(string $path): self
+    /** @return static */
+    public static function get(string $path)
     {
         return static::create($path)->acceptsGet();
     }
 
-    public static function put(string $path): self
+    /** @return static */
+    public static function put(string $path)
     {
         return static::create($path)->acceptsPut();
     }
 
-    public static function patch(string $path): self
+    /** @return static */
+    public static function patch(string $path)
     {
         return static::create($path)->acceptsPatch();
     }
 
-    public static function post(string $path): self
+    /** @return static */
+    public static function post(string $path)
     {
         return static::create($path)->acceptsPost();
     }
 
-    public static function delete(string $path): self
+    /** @return static */
+    public static function delete(string $path)
     {
         return static::create($path)->acceptsDelete();
     }
