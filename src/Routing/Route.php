@@ -101,6 +101,11 @@ class Route extends SymfonyRoute
         return $this->setDefault('_title', $title);
     }
 
+    public function parameterDefaultValue(string $parameter, string $defaultValue): self
+    {
+        return $this->setDefault($parameter, $defaultValue);
+    }
+
     public function titleCallback(string $callback): self
     {
         return $this->setDefault('_title_callback', $callback);

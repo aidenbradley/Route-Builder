@@ -211,6 +211,18 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function parameter_default_value(): void
+    {
+        $route = Route::get('/route/{param}');
+
+        $this->assertEmpty($route->getDefault('param'));
+
+        $route->parameterDefaultValue('param', 'value');
+
+        $this->assertEquals('value', $route->getDefault('param'));
+    }
+
+    /** @test */
     public function title_callback(): void
     {
         $route = Route::get('/');
