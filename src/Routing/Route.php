@@ -3,11 +3,29 @@
 namespace Drupal\route_builder\Routing;
 
 use Symfony\Component\Routing\Route as SymfonyRoute;
+use Symfony\Component\Routing\RouteCollection;
 
 class Route extends SymfonyRoute
 {
     /** @var array */
     private static $routes = [];
+
+    /** returns an array where the keys are the route names and the values are their respective route definitions */
+    public static function toArray(): array
+    {
+        return static::$routes;
+    }
+
+    public static function toRouteCollection(): RouteCollection
+    {
+        $collection = new RouteCollection();
+
+        foreach (static::$routes as $routeName => $route) {
+            $collection->add($routeName, $route);
+        }
+
+        return $collection;
+    }
 
     /** @return static */
     public static function create(string $routeName, string $path)
@@ -313,6 +331,7 @@ class Route extends SymfonyRoute
         return $this->getRouteDefinition()->setOption('parameters', $paramConverters);
     }
 
+    /** Gets the current route definition */
     public function getRouteDefinition(): Route
     {
         return end(static::$routes);
@@ -336,10 +355,5 @@ class Route extends SymfonyRoute
         return $this->getRouteDefinition()->setMethods(array_merge($this->getRouteDefinition()->getMethods(), [
             $method
         ]));
-    }
-
-    public static function toArray(): array
-    {
-        return static::$routes;
     }
 }

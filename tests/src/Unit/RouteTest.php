@@ -696,7 +696,7 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
-    public function multi_route(): void
+    public function to_array(): void
     {
         $getRoute = Route::get('route.get', '/route/get');
         $patchRoute = Route::patch('route.patch', '/route/patch');
@@ -711,5 +711,31 @@ class RouteTest extends UnitTestCase
             'route.put' => $putRoute,
             'route.delete' => $deleteRoute,
         ], Route::toArray());
+    }
+
+    /** @test */
+    public function to_route_collection(): void
+    {
+        $getRoute = Route::get('route.get', '/route/get');
+        $patchRoute = Route::patch('route.patch', '/route/patch');
+        $postRoute = Route::post('route.post', '/route/post');
+        $putRoute = Route::put('route.put', '/route/put');
+        $deleteRoute = Route::delete('route.delete', '/route/delete');
+
+        $routeCollection = Route::toRouteCollection();
+
+        $this->assertEquals([
+            'route.get' => $getRoute,
+            'route.patch' => $patchRoute,
+            'route.post' => $postRoute,
+            'route.put' => $putRoute,
+            'route.delete' => $deleteRoute,
+        ], $routeCollection->all());
+
+        $this->assertEquals($getRoute, $routeCollection->get('route.get'));
+        $this->assertEquals($patchRoute, $routeCollection->get('route.patch'));
+        $this->assertEquals($postRoute, $routeCollection->get('route.post'));
+        $this->assertEquals($putRoute, $routeCollection->get('route.put'));
+        $this->assertEquals($deleteRoute, $routeCollection->get('route.delete'));
     }
 }
