@@ -138,7 +138,7 @@ class Route extends SymfonyRoute
         return $this->getDefinition()->setDefault('_title', $title);
     }
 
-    public function parameterDefaultValue(string $parameter, string $defaultValue): self
+    public function defaultParamValue(string $parameter, string $defaultValue): self
     {
         return $this->getDefinition()->setDefault($parameter, $defaultValue);
     }
@@ -257,10 +257,14 @@ class Route extends SymfonyRoute
         return $this->getDefinition()->setRequirement('_module_dependencies', implode(',', $modules));
     }
 
-    /** @param string|array $modules */
-    public function dependsOnAnyModule($modules): self
+    public function dependsOnAnyModule(array $modules): self
     {
         return $this->getDefinition()->setRequirement('_module_dependencies', implode('+', $modules));
+    }
+
+    public function dependsOnModule(string $module): self
+    {
+        return $this->getDefinition()->setRequirement('_module_dependencies', $module);
     }
 
     public function usesCsrf(): self

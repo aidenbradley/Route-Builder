@@ -170,7 +170,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getDefault('_entity_view'));
 
-        $route = Route::get(__FUNCTION__. '_new_route', '/')->entityView('entity_view');
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->entityView('entity_view');
 
         $this->assertEquals('entity_view', $route->getDefault('_entity_view'));
     }
@@ -182,7 +182,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getDefault('_entity_list'));
 
-        $route = Route::get(__FUNCTION__. '_new_route', '/')->entityList('entity_list');
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->entityList('entity_list');
 
         $this->assertEquals('entity_list', $route->getDefault('_entity_list'));
     }
@@ -194,7 +194,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getDefault('_entity_form'));
 
-        $route = Route::get(__FUNCTION__. '_new_route', '/')->entityForm('entity_form');
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->entityForm('entity_form');
 
         $this->assertEquals('entity_form', $route->getDefault('_entity_form'));
     }
@@ -206,7 +206,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getDefault('_title'));
 
-        $route = Route::get(__FUNCTION__. '_new_route', '/')->title('my_title');
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->title('my_title');
 
         $this->assertEquals('my_title', $route->getDefault('_title'));
     }
@@ -218,7 +218,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getDefault('param'));
 
-        $route->parameterDefaultValue('param', 'value');
+        $route->defaultParamValue('param', 'value');
 
         $this->assertEquals('value', $route->getDefault('param'));
     }
@@ -232,7 +232,7 @@ class RouteTest extends UnitTestCase
 
         $titleCallback = get_class($this) . '::getTitle';
 
-        $route = Route::get(__FUNCTION__. '_new_route', '/')->titleCallback($titleCallback);
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->titleCallback($titleCallback);
 
         $this->assertEquals($titleCallback, $route->getDefault('_title_callback'));
     }
@@ -314,11 +314,11 @@ class RouteTest extends UnitTestCase
     {
         $route = Route::get(__FUNCTION__, '/');
 
-        $this->assertFalse((bool) $route->getRequirement('_access'));
+        $this->assertFalse((bool)$route->getRequirement('_access'));
 
         $route->defaultAccess();
 
-        $this->assertTrue((bool) $route->getRequirement('_access'));
+        $this->assertTrue((bool)$route->getRequirement('_access'));
     }
 
     /** @test */
@@ -513,15 +513,27 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function depends_on_module(): void
+    {
+        $route = Route::get(__FUNCTION__, '/');
+
+        $this->assertEmpty($route->getRequirement('_module_dependencies'));
+
+        $route->dependsOnModule('node');
+
+        $this->assertEquals('node', $route->getRequirement('_module_dependencies'));
+    }
+
+    /** @test */
     public function uses_csrf(): void
     {
         $route = Route::get(__FUNCTION__, '/');
 
-        $this->assertFalse((bool) $route->getRequirement('_csrf_token'));
+        $this->assertFalse((bool)$route->getRequirement('_csrf_token'));
 
         $route->usesCsrf();
 
-        $this->assertTrue((bool) $route->getRequirement('_csrf_token'));
+        $this->assertTrue((bool)$route->getRequirement('_csrf_token'));
     }
 
     /** @test */
@@ -529,11 +541,11 @@ class RouteTest extends UnitTestCase
     {
         $route = Route::get(__FUNCTION__, '/');
 
-        $this->assertFalse((bool) $route->getRequirement('_csrf_request_header_token'));
+        $this->assertFalse((bool)$route->getRequirement('_csrf_request_header_token'));
 
         $route->requiresCsrfTokenHeader();
 
-        $this->assertTrue((bool) $route->getRequirement('_csrf_request_header_token'));
+        $this->assertTrue((bool)$route->getRequirement('_csrf_request_header_token'));
     }
 
     /** @test */
@@ -541,11 +553,11 @@ class RouteTest extends UnitTestCase
     {
         $route = Route::get(__FUNCTION__, '/');
 
-        $this->assertFalse((bool) $route->getRequirement('_access_user_register'));
+        $this->assertFalse((bool)$route->getRequirement('_access_user_register'));
 
         $route->accessUserRegister();
 
-        $this->assertTrue((bool) $route->getRequirement('_access_user_register'));
+        $this->assertTrue((bool)$route->getRequirement('_access_user_register'));
     }
 
     /** @test */
@@ -553,11 +565,11 @@ class RouteTest extends UnitTestCase
     {
         $route = Route::get(__FUNCTION__, '/');
 
-        $this->assertFalse((bool) $route->getRequirement('_user_is_logged_in'));
+        $this->assertFalse((bool)$route->getRequirement('_user_is_logged_in'));
 
         $route->requiresLoginToAccess();
 
-        $this->assertTrue((bool) $route->getRequirement('_user_is_logged_in'));
+        $this->assertTrue((bool)$route->getRequirement('_user_is_logged_in'));
     }
 
     /** @test */
@@ -565,11 +577,11 @@ class RouteTest extends UnitTestCase
     {
         $route = Route::get(__FUNCTION__, '/');
 
-        $this->assertFalse((bool) $route->getOption('_admin_route'));
+        $this->assertFalse((bool)$route->getOption('_admin_route'));
 
         $route->isAdminRoute();
 
-        $this->assertTrue((bool) $route->getOption('_admin_route'));
+        $this->assertTrue((bool)$route->getOption('_admin_route'));
     }
 
     /** @test */
@@ -590,7 +602,7 @@ class RouteTest extends UnitTestCase
             'cookie',
         ], $route->getOption('_auth'));
 
-        $route = Route::get(__FUNCTION__. '_new_route', '/')->requiresAuthentication([
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->requiresAuthentication([
             'basic_auth',
             'cookie',
         ]);
@@ -630,11 +642,11 @@ class RouteTest extends UnitTestCase
     {
         $route = Route::get(__FUNCTION__, '/');
 
-        $this->assertFalse((bool) $route->getOption('_maintenance_access'));
+        $this->assertFalse((bool)$route->getOption('_maintenance_access'));
 
         $route->accessableDuringMaintenance();
 
-        $this->assertTrue((bool) $route->getOption('_maintenance_access'));
+        $this->assertTrue((bool)$route->getOption('_maintenance_access'));
     }
 
     /** @test */
@@ -654,11 +666,11 @@ class RouteTest extends UnitTestCase
     {
         $route = Route::get(__FUNCTION__, '/');
 
-        $this->assertFalse((bool) $route->getOption('no_cache'));
+        $this->assertFalse((bool)$route->getOption('no_cache'));
 
         $route->noCache();
 
-        $this->assertTrue((bool) $route->getOption('no_cache'));
+        $this->assertTrue((bool)$route->getOption('no_cache'));
     }
 
     /** @test */
@@ -781,17 +793,72 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function route_creation(): void
     {
-        $symfonyRoute = (new SymfonyRoute('/page/{node}'));
-        $symfonyRoute->setMethods([
-            'GET',
-        ])->setDefault('_controller', '\Drupal\controller\Controller::view')
+        $symfonyRoute = (new SymfonyRoute('/page/{node}'))
+            ->setMethods('GET')
+            ->setDefault('_controller', '\Drupal\controller\Controller::view')
             ->setDefault('_title', 'View page')
-            ->setRequirement('_permission', 'access content, view content')
+            ->setDefault('node', '1')
+            ->setRequirement('_permission', 'access content,view content')
             ->setRequirement('_role', 'editor')
+            ->setRequirement('_module_dependencies', 'node')
+            ->setRequirement('_user_is_logged_in', 'TRUE')
+            ->setOption('no_cache', 'TRUE')
             ->setOption('parameters', [ //you can use route upcasting here, but just to provide an example
                 'node' => [
                     'type' => 'entity:node',
                 ],
-            ])->setOption('_no_cache', 'TRUE');
+            ]);
+
+        $route = Route::get('node.page', '/page{node}')
+            ->controller('\Drupal\controller\Controller', 'view')
+            ->title('View page')
+            ->defaultParamValue('node', '1')
+            ->requiresRole('editor')
+            ->dependsOnModule('node')
+            ->requiresLoginToAccess()
+            ->setParameterConverter('node', 'entity:node')
+            ->noCache()
+            ->requiresAllPermissions([
+                'access content',
+                'view content',
+            ]);
+
+        $this->assertEquals($symfonyRoute->getMethods(), $route->getMethods());
+        $this->assertEquals(
+            $symfonyRoute->getDefault('_controller'),
+            $route->getDefault('_controller')
+        );
+        $this->assertEquals(
+            $symfonyRoute->getDefault('_title'),
+            $route->getDefault('_title')
+        );
+        $this->assertEquals(
+            $symfonyRoute->getDefault('node'),
+            $route->getDefault('node')
+        );
+        $this->assertEquals(
+            $symfonyRoute->getRequirement('_permission'),
+            $route->getRequirement('_permission')
+        );
+        $this->assertEquals(
+            $symfonyRoute->getRequirement('_role'),
+            $route->getRequirement('_role')
+        );
+        $this->assertEquals(
+            $symfonyRoute->getRequirement('_module_dependencies'),
+            $route->getRequirement('_module_dependencies')
+        );
+        $this->assertEquals(
+            $symfonyRoute->getRequirement('_user_is_logged_in'),
+            $route->getRequirement('_user_is_logged_in')
+        );
+        $this->assertEquals(
+            $symfonyRoute->getOption('no_cache'),
+            $route->getOption('no_cache')
+        );
+        $this->assertEquals(
+            $symfonyRoute->getOption('parameters'),
+            $route->getOption('parameters')
+        );
     }
 }
