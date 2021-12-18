@@ -696,8 +696,28 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function clear(): void
+    {
+        Route::clear();
+
+        $getRoute = Route::get('route.get', '/route/get');
+        $patchRoute = Route::patch('route.patch', '/route/patch');
+
+        $this->assertEquals([
+            'route.get' => $getRoute,
+            'route.patch' => $patchRoute,
+        ], Route::toArray());
+
+        Route::clear();
+
+        $this->assertEmpty(Route::toArray());
+    }
+
+    /** @test */
     public function to_array(): void
     {
+        Route::clear();
+
         $getRoute = Route::get('route.get', '/route/get');
         $patchRoute = Route::patch('route.patch', '/route/patch');
         $postRoute = Route::post('route.post', '/route/post');
@@ -716,6 +736,8 @@ class RouteTest extends UnitTestCase
     /** @test */
     public function to_route_collection(): void
     {
+        Route::clear();
+
         $getRoute = Route::get('route.get', '/route/get');
         $patchRoute = Route::patch('route.patch', '/route/patch');
         $postRoute = Route::post('route.post', '/route/post');
