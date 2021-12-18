@@ -329,8 +329,10 @@ class Route extends SymfonyRoute
             ],
         ];
 
-        if ($this->getDefinition()->getOption('parameters') !== null) {
-            $paramConverters = array_merge($this->getDefinition()->getOption('parameters'), $paramConverters);
+        $parameters = $this->getDefinition()->getOption('parameters');
+
+        if ($parameters !== null) {
+            $paramConverters = array_merge($parameters, $paramConverters);
         }
 
         return $this->getDefinition()->setOption('parameters', $paramConverters);
