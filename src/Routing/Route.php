@@ -163,14 +163,24 @@ class Route extends SymfonyRoute
         return $this->getDefinition()->setRequirement('_permission', implode('+', $permissions));
     }
 
+    public function requiresPermission(string $permission): self
+    {
+        return $this->getDefinition()->setRequirement('_permission', $permission);
+    }
+
     public function requiresAllRoles(array $roles): self
     {
         return $this->getDefinition()->setRequirement('_role', implode(',', $roles));
     }
 
-    public function requiresAnyRoles(array $roles): self
+    public function requiresAnyRole(array $roles): self
     {
         return $this->getDefinition()->setRequirement('_role', implode('+', $roles));
+    }
+
+    public function requiresRole(string $role): self
+    {
+        return $this->getDefinition()->setRequirement('_role', $role);
     }
 
     public function defaultAccess(): self

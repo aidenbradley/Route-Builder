@@ -4,6 +4,7 @@ namespace Drupal\Tests\route_builder\Unit;
 
 use Drupal\route_builder\Routing\Route;
 use Drupal\Tests\UnitTestCase;
+use Symfony\Component\Routing\Route as SymfonyRoute;
 
 class RouteTest extends UnitTestCase
 {
@@ -265,6 +266,14 @@ class RouteTest extends UnitTestCase
     }
 
     /** @test */
+    public function requires_permission(): void
+    {
+        $route = Route::get(__FUNCTION__, '/')->requiresPermission('access content');
+
+        $this->assertEquals('access content', $route->getRequirement('_permission'));
+    }
+
+    /** @test */
     public function requires_all_roles(): void
     {
         $roles = [
@@ -287,9 +296,17 @@ class RouteTest extends UnitTestCase
             'third_role',
         ];
 
-        $route = Route::get(__FUNCTION__, '/')->requiresAnyRoles($roles);
+        $route = Route::get(__FUNCTION__, '/')->requiresAnyRole($roles);
 
         $this->assertEquals(implode('+', $roles), $route->getRequirement('_role'));
+    }
+
+    /** @test */
+    public function requires_role(): void
+    {
+        $route = Route::get(__FUNCTION__, '/')->requiresRole('editor');
+
+        $this->assertEquals('editor', $route->getRequirement('_role'));
     }
 
     /** @test */
@@ -759,5 +776,22 @@ class RouteTest extends UnitTestCase
         $this->assertEquals($postRoute, $routeCollection->get('route.post'));
         $this->assertEquals($putRoute, $routeCollection->get('route.put'));
         $this->assertEquals($deleteRoute, $routeCollection->get('route.delete'));
+    }
+
+    /** @test */
+    public function route_creation(): void
+    {
+        $symfonyRoute = (new SymfonyRoute('/page/{node}'));
+        $symfonyRoute->setMethods([
+            'GET',
+        ])->setDefault('_controller', '\Drupal\controller\Controller::view')
+            ->setDefault('_title', 'View page')
+            ->setRequirement('_permission', 'access content, view content')
+            ->setRequirement('_role', 'editor')
+            ->setOption('parameters', [ //you can use route upcasting here, but just to provide an example
+                'node' => [
+                    'type' => 'entity:node',
+                ],
+            ])->setOption('_no_cache', 'TRUE');
     }
 }
