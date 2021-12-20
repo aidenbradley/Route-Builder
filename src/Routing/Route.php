@@ -188,18 +188,18 @@ class Route extends SymfonyRoute
         return $this->getDefinition()->setRequirement('_access', 'TRUE');
     }
 
-    public function entityAccess(string $entityAccess): self
+    public function setEntityAccess(string $entityAccess): self
     {
         return $this->getDefinition()->setRequirement('_entity_access', $entityAccess);
     }
 
-    public function entityValidation(string $entityTypeId, string $regex): self
+    public function setEntityValidation(string $entityTypeId, string $regex): self
     {
         return $this->getDefinition()->setRequirement($entityTypeId, $regex);
     }
 
     /** @param string|array $bundles */
-    public function entityBundles(string $entityTypeId, $bundles): self
+    public function setEntityBundles(string $entityTypeId, $bundles): self
     {
         return $this->getDefinition()->setRequirement(
             '_entity_bundles',
@@ -207,12 +207,12 @@ class Route extends SymfonyRoute
         );
     }
 
-    public function entityCreateAccess(string $entityTypeId, string $bundleOrRouteParam): self
+    public function setEntityCreateAccess(string $entityTypeId, string $bundleOrRouteParam): self
     {
         return $this->getDefinition()->setRequirement('_entity_create_access', $entityTypeId . ':' . $bundleOrRouteParam);
     }
 
-    public function customAccessCallback(string $accessCheck): self
+    public function setCustomAccessCallback(string $accessCheck): self
     {
         return $this->getDefinition()->setRequirement('_custom_access', $accessCheck);
     }
@@ -237,12 +237,12 @@ class Route extends SymfonyRoute
         return $this->getDefinition()->setRequirement('_format', $format);
     }
 
-    public function onlyAcceptsJson(): self
+    public function onlyAcceptsJsonRequests(): self
     {
         return $this->getDefinition()->setContentTypeFormat('json');
     }
 
-    public function onlyAcceptsXml(): self
+    public function onlyAcceptsXmlRequests(): self
     {
         return $this->getDefinition()->setContentTypeFormat('xml');
     }

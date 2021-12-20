@@ -328,7 +328,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getRequirement('_entity_access'));
 
-        $route->entityAccess('node.view');
+        $route->setEntityAccess('node.view');
 
         $this->assertEquals('node.view', $route->getRequirement('_entity_access'));
     }
@@ -340,7 +340,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getRequirement('node'));
 
-        $route->entityValidation('node', '\d+');
+        $route->setEntityValidation('node', '\d+');
 
         $this->assertEquals('\d+', $route->getRequirement('node'));
     }
@@ -352,11 +352,11 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getRequirement('_entity_bundles'));
 
-        $route->entityBundles('node', 'article');
+        $route->setEntityBundles('node', 'article');
 
         $this->assertEquals('node:article', $route->getRequirement('_entity_bundles'));
 
-        $route->entityBundles('node', [
+        $route->setEntityBundles('node', [
             'article',
             'page'
         ]);
@@ -371,11 +371,11 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getRequirement('_entity_create_access'));
 
-        $route->entityCreateAccess('node', 'article');
+        $route->setEntityCreateAccess('node', 'article');
 
         $this->assertEquals('node:article', $route->getRequirement('_entity_create_access'));
 
-        $route->entityCreateAccess('node', '{route_parameter}');
+        $route->setEntityCreateAccess('node', '{route_parameter}');
 
         $this->assertEquals('node:{route_parameter}', $route->getRequirement('_entity_create_access'));
     }
@@ -389,7 +389,7 @@ class RouteTest extends UnitTestCase
 
         $accessCallback = get_class($this) . '::accessCallback';
 
-        $route->customAccessCallback($accessCallback);
+        $route->setCustomAccessCallback($accessCallback);
 
         $this->assertEquals($accessCallback, $route->getRequirement('_custom_access'));
     }
@@ -449,7 +449,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getRequirement('_content_type_format'));
 
-        $route->onlyAcceptsJson();
+        $route->onlyAcceptsJsonRequests();
 
         $this->assertEquals('json', $route->getRequirement('_content_type_format'));
     }
@@ -461,7 +461,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getRequirement('_content_type_format'));
 
-        $route->onlyAcceptsXml();
+        $route->onlyAcceptsXmlRequests();
 
         $this->assertEquals('xml', $route->getRequirement('_content_type_format'));
     }
