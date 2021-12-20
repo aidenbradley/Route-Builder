@@ -142,11 +142,11 @@ class RouteTest extends UnitTestCase
 
         $controller = '\Drupal\controller\Controller';
 
-        $route = Route::get(__FUNCTION__ . '_new_route', '/')->controller($controller, 'render');
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->setController($controller, 'render');
 
         $this->assertEquals($controller . '::render', $route->getDefault('_controller'));
 
-        $route->controller('\Drupal\controller\Controller');
+        $route->setController('\Drupal\controller\Controller');
 
         $this->assertEquals($controller . '::__invoke', $route->getDefault('_controller'));
     }
@@ -206,7 +206,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertEmpty($route->getDefault('_title'));
 
-        $route = Route::get(__FUNCTION__ . '_new_route', '/')->title('my_title');
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->setTitle('my_title');
 
         $this->assertEquals('my_title', $route->getDefault('_title'));
     }
@@ -232,7 +232,7 @@ class RouteTest extends UnitTestCase
 
         $titleCallback = get_class($this) . '::getTitle';
 
-        $route = Route::get(__FUNCTION__ . '_new_route', '/')->titleCallback($titleCallback);
+        $route = Route::get(__FUNCTION__ . '_new_route', '/')->setTitleCallback($titleCallback);
 
         $this->assertEquals($titleCallback, $route->getDefault('_title_callback'));
     }
@@ -316,7 +316,7 @@ class RouteTest extends UnitTestCase
 
         $this->assertFalse((bool)$route->getRequirement('_access'));
 
-        $route->defaultAccess();
+        $route->hasDefaultAccess();
 
         $this->assertTrue((bool)$route->getRequirement('_access'));
     }
@@ -826,8 +826,8 @@ class RouteTest extends UnitTestCase
             ]);
 
         $route = Route::get('node.page', '/page/{node}')
-            ->controller('\Drupal\controller\Controller', 'view')
-            ->title('View page')
+            ->setController('\Drupal\controller\Controller', 'view')
+            ->setTitle('View page')
             ->defaultParamValue('node', '1')
             ->requiresRole('editor')
             ->dependsOnModule('node')

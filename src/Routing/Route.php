@@ -108,7 +108,7 @@ class Route extends SymfonyRoute
         return $this;
     }
 
-    public function controller(string $controller, string $method = '__invoke'): self
+    public function setController(string $controller, string $method = '__invoke'): self
     {
         return $this->getDefinition()->setDefault('_controller', $controller . '::' . $method);
     }
@@ -133,7 +133,7 @@ class Route extends SymfonyRoute
         return $this->getDefinition()->setDefault('_entity_form', $entityForm);
     }
 
-    public function title(string $title): self
+    public function setTitle(string $title): self
     {
         return $this->getDefinition()->setDefault('_title', $title);
     }
@@ -143,12 +143,12 @@ class Route extends SymfonyRoute
         return $this->getDefinition()->setDefault($parameter, $defaultValue);
     }
 
-    public function titleCallback(string $callback): self
+    public function setTitleCallback(string $callback): self
     {
         return $this->getDefinition()->setDefault('_title_callback', $callback);
     }
 
-    public function titleArguments(): void
+    public function setTitleArguments(): void
     {
         // need to figure out what's accepted here
     }
@@ -183,7 +183,7 @@ class Route extends SymfonyRoute
         return $this->getDefinition()->setRequirement('_role', $role);
     }
 
-    public function defaultAccess(): self
+    public function hasDefaultAccess(): self
     {
         return $this->getDefinition()->setRequirement('_access', 'TRUE');
     }
